@@ -1,16 +1,20 @@
 import React, { useRef, useState } from 'react';
-import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
+import {
+  Radar, RadarChart, PolarGrid,
+  PolarAngleAxis, PolarRadiusAxis,
+  ResponsiveContainer
+} from 'recharts';
 import { UploadCloud, Star, Download } from 'lucide-react';
 
 export default function AiScoreUI() {
-  const fileInputRef = useRef(null);
-  const [radarData, setRadarData] = useState([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [radarData, setRadarData] = useState<any[]>([]);
   const [totalScore, setTotalScore] = useState(0);
   const [feedbacks, setFeedbacks] = useState<string[]>([]);
 
   const handleUploadClick = () => fileInputRef.current?.click();
 
-  const handleFileChange = async (e) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -30,8 +34,8 @@ export default function AiScoreUI() {
 
   const parseAIScore = (text: string) => {
     const regex = /(\w+)[:：]\s*(\d+(\.\d+)?)/g;
-    const dimensions = [];
-    const feedbacks = [];
+    const dimensions: any[] = [];
+    const feedbacks: string[] = [];
     let match;
     let total = 0;
     while ((match = regex.exec(text)) !== null) {
@@ -47,11 +51,20 @@ export default function AiScoreUI() {
 
   return (
     <div className="p-6 space-y-8">
-      <div className="border-dashed border-2 border-gray-300 h-60 flex flex-col justify-center items-center cursor-pointer hover:bg-gray-50" onClick={handleUploadClick}>
+      <div
+        className="border-dashed border-2 border-gray-300 h-60 flex flex-col justify-center items-center cursor-pointer hover:bg-gray-50"
+        onClick={handleUploadClick}
+      >
         <UploadCloud className="w-10 h-10 mb-2" />
         <p className="text-lg font-semibold">拖拽图片到此处，或点击上传</p>
         <button className="mt-4 bg-blue-500 text-white px-4 py-2 rounded">上传图片</button>
-        <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleFileChange}
+        />
       </div>
 
       <div className="p-6 border">
@@ -77,7 +90,9 @@ export default function AiScoreUI() {
 
       {radarData.map((item, idx) => (
         <div key={idx} className="p-4 border">
-          <h4 className="font-semibold text-base mb-2">{item.dimension}：{item.score} 分</h4>
+          <h4 className="font-semibold text-base mb-2">
+            {item.dimension}：{item.score} 分
+          </h4>
           <p className="text-sm text-gray-600">{feedbacks[idx] || '暂无建议'}</p>
         </div>
       ))}
